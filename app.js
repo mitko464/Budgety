@@ -87,14 +87,14 @@ var budgetController = (function() {
 		},
 
 		calculateBudget: function() {
-			// calculate total income abnd expenses
+			// calculate total income and expenses
 			calculateTotal('exp');
 			calculateTotal('inc');
 
 			// Calculate the budget: income - expenses
 			data.budget = data.totals.inc - data.totals.exp;
 
-			// Calculate hte percentage that we spent
+			// Calculate the percentage that we spent
 			if (data.totals.inc > 0) {
 				data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100);
 			} else {
@@ -196,7 +196,7 @@ var UIController = (function() {
 				html = '<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
 			}
 
-			// Replace plaveholder text with actual data 
+			// Replace placeholder text with actual data 
 			newHtml = html.replace('%id%', obj.id);
 			newHtml = newHtml.replace('%description%', obj.description);
 			newHtml = newHtml.replace('%value%', formatNumber(obj.value, type));
@@ -250,7 +250,6 @@ var UIController = (function() {
 					current.textContent = '---';
 				}
 			});
-
 		},
 
 		displayMonth: function() {
@@ -263,7 +262,6 @@ var UIController = (function() {
 
 			year = now.getFullYear();
 			document.querySelector(DOMstrings.dateLabel).textContent = months[month] + ' ' + year;
-
 		},
 
 		changedType: function() {
@@ -277,18 +275,13 @@ var UIController = (function() {
 			});
 
 			document.querySelector(DOMstrings.inputBtn).classList.toggle('red');
-
 		},
 
 		getDOMstrings: function() {
 			return DOMstrings;
 		}
 	}
-
 })();
-
-
-
 
 
 // GLOBAL APP CONTORLLER
@@ -312,13 +305,13 @@ var controller = (function(budgetCtrl, UICtrl) {
 	};
 
 	var updatePercentages = function() {
-		// 1. cALC PERCENTAGES
+		// 1. Calculate Percentages
 		budgetCtrl.calculatePercentages();
 
-		// 2. Read percentages dfeom budget controller
+		// 2. Read percentages from budget controller
 		var percentages = budgetCtrl.getPercentages();
 
-		// 3. Updatew tye UI witrh the new percentages
+		// 3. Update tye UI with the new percentages
 		UICtrl.displayPercentages(percentages);
 	};
 
@@ -326,7 +319,7 @@ var controller = (function(budgetCtrl, UICtrl) {
 		// 1. Calculate the budget
 		budgetCtrl.calculateBudget();
 
-		// 2. return the budget
+		// 2. Return the budget
 		var budget = budgetCtrl.getBudget();
 
 		// 3. Display the budget on the UI
@@ -341,19 +334,19 @@ var controller = (function(budgetCtrl, UICtrl) {
 
 		if (input.description !== "" && !isNaN(input.value) && input.value > 0) {
 
-			// 2. Add the item to the budfet controller
+			// 2. Add the item to the budget controller
 			newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
 			// 3. Add item to the UI
 			UICtrl.addListItem(newItem, input.type);
 
-			// 4. Clera the fields
+			// 4. Clear the fields
 			UICtrl.clearFields();
 
-			// 5. Calculate ansd update bydget
+			// 5. Calculate and update budget
 			updateBudget();
 
-			// 6. calculate and upudate percentages
+			// 6. Calculate and update percentages
 			updatePercentages();
 		}
 	};
@@ -364,12 +357,11 @@ var controller = (function(budgetCtrl, UICtrl) {
 		itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
 
 		if (itemID) {
-			// inc-1
 			splitID = itemID.split('-');
 			type = splitID[0];
 			ID = parseInt(splitID[1]);
 
-			// 1. delete the item from the data structure
+			// 1. Delete the item from the data structure
 			budgetCtrl.deleteItem(type, ID);
 
 			// 2. Delete item from UI
@@ -396,8 +388,6 @@ var controller = (function(budgetCtrl, UICtrl) {
 			setupEventListeners();
 		}
 	};
-
-
 })(budgetController, UIController);
 
 controller.init();
